@@ -1,0 +1,24 @@
+package com.nttdata.movement.service;
+
+import com.nttdata.movement.entity.Asociation;
+import com.nttdata.movement.model.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+public interface AsociationService {
+    Flux<Asociation> findAll();
+    Mono<Asociation> findAsociation(String id);
+    Mono<Customer> findCustomerById(String id);
+    Mono<Product> findProductById(String id);
+    Mono<Asociation> create(Asociation asociation);
+    Mono<Asociation> createMovement(String idAsociation, Movement movement);
+    Mono<Asociation> createTransfer(Transfer transfer);
+    Mono<Void> delete(String id);
+    Flux<List<Report1>> balanceProducts(String idCustomer);
+    Mono<Report2> movementsByProduct(String idCustomer, String idProduct);
+
+}

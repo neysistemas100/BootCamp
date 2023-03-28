@@ -1,0 +1,9 @@
+
+server:
+  port: 8084
+spring:
+  data:
+    mongodb:
+      database: Bank
+      host: localhost
+      port: 27017
