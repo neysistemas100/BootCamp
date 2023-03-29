@@ -1,0 +1,18 @@
+#server:
+#  port: 8083
+#spring:
+#   data:
+#     mongodb:
+#       database: Bank
+#       host: localhost
+#       port: 27017
+#   application:
+#     name: movement-service
+
+spring:
+  application:
+    name: movement-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8084/

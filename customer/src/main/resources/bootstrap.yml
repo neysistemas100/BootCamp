@@ -1,0 +1,19 @@
+#server:
+#  port: 8081
+#spring:
+#  data:
+#    mongodb:
+#      database: Bank
+#      host: localhost
+#      port: 27017
+#  application:
+#    name: customer-service
+
+spring:
+  application:
+    name: customer-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8084/
+
