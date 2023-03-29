@@ -8,3 +8,11 @@ spring:
       port: 27017
   application:
     name: product-service
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      default-zone: http://localhost:8761/eureka
+    instance:
+      hostname: localhost
