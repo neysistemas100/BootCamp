@@ -14,10 +14,11 @@ public interface AsociationService {
     Mono<Asociation> findAsociation(String id);
     Mono<Customer> findCustomerById(String id);
     Mono<Product> findProductById(String id);
-    Mono<Asociation> create(Asociation asociation);
+    Mono<Asociation> createAsociation(Asociation asociation);
     Mono<Asociation> createMovement(String idAsociation, Movement movement);
     Mono<Asociation> createTransfer(Transfer transfer);
-    Mono<Void> delete(String id);
+    Mono<Void> deleteAsociation(String id);
+    Mono<Asociation> updateAsociation(Asociation asociation);
     Flux<List<Report1>> balanceProducts(String idCustomer);
     Mono<Report2> movementsByProduct(String idCustomer, String idProduct);
 

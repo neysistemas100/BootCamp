@@ -82,7 +82,7 @@ public class AsociationServiceImp implements AsociationService {
     }
 
     @Override
-    public Mono<Asociation> create(Asociation asociation) {
+    public Mono<Asociation> createAsociation(Asociation asociation) {
         /*return this.findCustomerById(asociation.getIdCustomer())
                 .then(this.findProductById(asociation.getIdProduct()))
                 .flatMap(m -> asociationRepository.insert(asociation));*/
@@ -148,10 +148,21 @@ public class AsociationServiceImp implements AsociationService {
     }
 
     @Override
-    public Mono<Void> delete(String id) {
+    public Mono<Void> deleteAsociation(String id) {
         return asociationRepository.findById(id)
                 .switchIfEmpty(Mono.error(new RuntimeException("Asociation's ID does not exist")))
                 .flatMap(m -> asociationRepository.deleteById(m.getId()));
+    }
+
+    @Override
+    public Mono<Asociation> updateAsociation(Asociation asociation) {
+        return asociationRepository.findById(asociation.getId())
+                .switchIfEmpty(Mono.error(new RuntimeException("Asociation's ID does not exist")))
+                .flatMap(a->{
+                    a.setNumberProduct(asociation.getNumberProduct());
+                    a.setBalance(asociation.getBalance());
+                    return asociationRepository.save(a);
+                });
     }
 
     @Override

@@ -30,13 +30,18 @@ public class AsociationController {
     }
 
     @PostMapping
-    public Mono<Asociation> create(@Valid @RequestBody Asociation asociation){
-        return asociationService.create(asociation);
+    public Mono<Asociation> createAsociation(@Valid @RequestBody Asociation asociation){
+        return asociationService.createAsociation(asociation);
+    }
+
+    @PutMapping
+    public Mono<Asociation> updateAsociation(@Valid @RequestBody Asociation asociation){
+        return asociationService.updateAsociation(asociation);
     }
 
     @DeleteMapping("/{id}")
-    public Mono<Void> delete(@PathVariable String id){
-        return asociationService.delete(id);
+    public Mono<Void> deleteAsociation(@PathVariable String id){
+        return asociationService.deleteAsociation(id);
     }
 
     @GetMapping("fCus/{id}")

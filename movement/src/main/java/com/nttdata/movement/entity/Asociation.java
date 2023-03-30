@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -28,6 +29,7 @@ public class Asociation {
     @NotNull
     @NotEmpty(message = "Number product can't be empty")
     private String numberProduct;
+    @Min(value = 0, message = "this value can't be a negative value")
     private Double balance;
     private List<Movement> movements;
     private List<Transfer> transfers;
