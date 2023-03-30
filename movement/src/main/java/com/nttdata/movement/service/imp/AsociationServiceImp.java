@@ -26,7 +26,6 @@ public class AsociationServiceImp implements AsociationService {
     CustomerFeignClient customerFeignClient;
     @Autowired
     private AsociationRepository asociationRepository;
-
     @Autowired
     private WebClient.Builder webClientBuilder;
 
@@ -50,7 +49,7 @@ public class AsociationServiceImp implements AsociationService {
     public Mono<Customer> findCustomerById(String id) {
         return webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8082/customers/{id}", id)
+                .uri("http://customer-service/customers/{id}", id)//http://localhost:8081/customers/{id}
                 .retrieve()
                 .onStatus(
                         HttpStatus.INTERNAL_SERVER_ERROR::equals,
@@ -73,7 +72,7 @@ public class AsociationServiceImp implements AsociationService {
     public Mono<Product> findProductById(String id) {
         return webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8081/products/{id}", id)
+                .uri("http://product-service/products/{id}", id)//http://localhost:8082/products/{id}
                 .retrieve()
                 .onStatus(
                         HttpStatus.INTERNAL_SERVER_ERROR::equals,

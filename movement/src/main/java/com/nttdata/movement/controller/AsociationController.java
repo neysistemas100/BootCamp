@@ -29,6 +29,16 @@ public class AsociationController {
         return asociationService.findAsociation(id);
     }
 
+    @PostMapping
+    public Mono<Asociation> create(@Valid @RequestBody Asociation asociation){
+        return asociationService.create(asociation);
+    }
+
+    @DeleteMapping("/{id}")
+    public Mono<Void> delete(@PathVariable String id){
+        return asociationService.delete(id);
+    }
+
     @GetMapping("fCus/{id}")
     public Mono<Customer> findCustomer(@PathVariable("id") String id){
         return asociationService.findCustomerById(id);
@@ -37,11 +47,6 @@ public class AsociationController {
     @GetMapping("fPro/{id}")
     public Mono<Product> findProduct(@PathVariable("id") String id){
         return asociationService.findProductById(id);
-    }
-
-    @PostMapping
-    public Mono<Asociation> create(@Valid @RequestBody Asociation asociation){
-        return asociationService.create(asociation);
     }
 
     @PutMapping("movements/{id}")
@@ -54,16 +59,15 @@ public class AsociationController {
         return asociationService.createTransfer(transfer);
     }
 
-    @DeleteMapping("/{id}")
-    public Mono<Void> delete(@PathVariable String id){
-        return asociationService.delete(id);
-    }
 
+
+    //this endpoint gets report of all products(name, number, balance) by idcustomer
     @GetMapping("/reports/{id}")
-    Flux<List<Report1>> balanceProducts(@PathVariable("id") String id){
+    public Flux<List<Report1>> balanceProducts(@PathVariable("id") String id){
         return asociationService.balanceProducts(id);
     }
 
+    //this endpoint gets report all movements and transfers accord idcustomer and idproduct
     @GetMapping("/reports/{idCustomer}/{idProduct}")
     public Mono<Report2> movementsByProduct(@PathVariable("idCustomer") String idCustomer, @PathVariable("idProduct") String idProduct){
         return asociationService.movementsByProduct(idCustomer, idProduct);
