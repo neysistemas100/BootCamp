@@ -5,7 +5,7 @@ spring:
     config:
       server:
         git:
-          default-label: eureka
+          default-label: main
           uri: https://github.com/neysistemas100/BootCamp
           search-paths: config-data
   application:
