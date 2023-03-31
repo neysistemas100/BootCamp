@@ -45,13 +45,13 @@ public class AsociationController {
         return asociationService.deleteAsociation(id);
     }
 
-    @CircuitBreaker(name = "customers-cb", fallbackMethod = "fallBackGetCustomer")
+    @CircuitBreaker(name = "customersCB", fallbackMethod = "fallBackGetCustomer")
     @GetMapping("fCus/{id}")
     public Mono<Customer> findCustomer(@PathVariable("id") String id){
         return asociationService.findCustomerById(id);
     }
 
-    private Mono<Customer> fallBackGetCustomer(@PathVariable("id") String id, RuntimeException e){
+    public Mono<Customer> fallBackGetCustomer(Exception e){
         return Mono.just(new Customer("99999","Personal&Empresarial","Alternative Customer"));
     }
 
