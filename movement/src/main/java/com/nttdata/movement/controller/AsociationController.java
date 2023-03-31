@@ -3,6 +3,7 @@ package com.nttdata.movement.controller;
 import com.nttdata.movement.entity.Asociation;
 import com.nttdata.movement.model.*;
 import com.nttdata.movement.service.AsociationService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -44,9 +45,14 @@ public class AsociationController {
         return asociationService.deleteAsociation(id);
     }
 
+    @CircuitBreaker(name = "customers-cb", fallbackMethod = "fallBackGetCustomer")
     @GetMapping("fCus/{id}")
     public Mono<Customer> findCustomer(@PathVariable("id") String id){
         return asociationService.findCustomerById(id);
+    }
+
+    private Mono<Customer> fallBackGetCustomer(@PathVariable("id") String id, RuntimeException e){
+        return Mono.just(new Customer("99999","Personal&Empresarial","Alternative Customer"));
     }
 
     @GetMapping("fPro/{id}")

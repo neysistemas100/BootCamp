@@ -5,7 +5,7 @@ spring:
     config:
       server:
         git:
-          default-label: apiGateway
+          default-label: resilience
           uri: https://github.com/neysistemas100/BootCamp
           search-paths: config-data
   application:

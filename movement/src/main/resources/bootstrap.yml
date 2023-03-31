@@ -23,3 +23,26 @@ spring:
     config:
       enabled: true
       uri: http://localhost:8084/
+
+
+#resilience4j.circuitbreaker:
+#  instances:
+#    customers-cb:
+#      registerHealthIndicator: true
+#      slidingWindowSize: 10
+#      permittedNumberOfCallsInHalfOpenState: 4
+#      slidingWindowType: TIME_BASED
+#      minimumNumberOfCalls: 8
+#      waitDurationInOpenState: 10s
+#      failureRateThreshold: 50
+#      eventConsumerBufferSize: 10
+#    products-cb:
+#      registerHealthIndicator: true
+#      slidingWindowSize: 10
+#      permittedNumberOfCallsInHalfOpenState: 4
+#      slidingWindowType: TIME_BASED
+#      minimumNumberOfCalls: 8
+#      waitDurationInOpenState: 10s
+#      failureRateThreshold: 50
+#      eventConsumerBufferSize: 10
+

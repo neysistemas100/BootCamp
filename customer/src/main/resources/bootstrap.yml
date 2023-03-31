@@ -24,3 +24,6 @@ spring:
       enabled: true
       uri: http://localhost:8084/
 
+
+
+
