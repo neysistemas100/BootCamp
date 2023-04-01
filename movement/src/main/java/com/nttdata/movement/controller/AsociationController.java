@@ -3,7 +3,9 @@ package com.nttdata.movement.controller;
 import com.nttdata.movement.entity.Asociation;
 import com.nttdata.movement.model.*;
 import com.nttdata.movement.service.AsociationService;
+
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -13,6 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/asociations")
 public class AsociationController {
@@ -48,10 +51,13 @@ public class AsociationController {
     @CircuitBreaker(name = "customersCB", fallbackMethod = "fallBackGetCustomer")
     @GetMapping("fCus/{id}")
     public Mono<Customer> findCustomer(@PathVariable("id") String id){
+        log.info("Starting recovery information about customer");
         return asociationService.findCustomerById(id);
     }
 
     public Mono<Customer> fallBackGetCustomer(Exception e){
+        System.out.println("aca debe salir esto");
+        log.info("del log");
         return Mono.just(new Customer("99999","Personal&Empresarial","Alternative Customer"));
     }
 
