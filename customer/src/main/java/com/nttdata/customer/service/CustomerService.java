@@ -10,4 +10,5 @@ public interface CustomerService {
     Mono<Customer> create(Customer customer);
     Mono<Customer> update(Customer customer);
     Mono<Void> delete(String id);
+    Mono<Customer> findByCellNumberPhone(String cellNumber);
 }

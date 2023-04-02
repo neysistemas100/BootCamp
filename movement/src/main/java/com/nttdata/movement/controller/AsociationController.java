@@ -64,6 +64,12 @@ public class AsociationController {
         return asociationService.createTransfer(transfer);
     }
 
+    @PutMapping("movements2/{cellNumber}")
+    public Mono<Asociation> createMovementMobileWallet(@PathVariable("cellNumber") String cellNumber, @RequestBody MovementMobileWallet movementMobileWallet){
+        return asociationService.createMovementMobileWallet(cellNumber,movementMobileWallet);
+    }
+
+
 
 
     //this endpoint gets report of all products(name, number, balance) by idcustomer

@@ -1,6 +1,7 @@
 package com.nttdata.movement.entity;
 
 import com.nttdata.movement.model.Movement;
+import com.nttdata.movement.model.MovementMobileWallet;
 import com.nttdata.movement.model.Transfer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,10 +28,12 @@ public class Asociation {
     @NotEmpty(message = "Id Product can't be empty")
     private String idProduct;
     @NotNull
-    @NotEmpty(message = "Number product can't be empty")
     private String numberProduct;
+    private String cellNumberPhone;
+    private String accountAsociated;
     @Min(value = 0, message = "this value can't be a negative value")
     private Double balance;
     private List<Movement> movements;
     private List<Transfer> transfers;
+    private List<MovementMobileWallet> movementMobileWallets;
 }

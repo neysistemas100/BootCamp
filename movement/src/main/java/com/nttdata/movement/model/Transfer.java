@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Transfer {
-    private String id;
     private String sourceAccount;
     private String destinationAccount;
     private Double amount;

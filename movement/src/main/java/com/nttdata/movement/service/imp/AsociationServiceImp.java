@@ -1,6 +1,5 @@
 package com.nttdata.movement.service.imp;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.nttdata.movement.entity.Asociation;
 import com.nttdata.movement.feignclient.CustomerFeignClient;
 import com.nttdata.movement.model.*;
@@ -13,12 +12,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AsociationServiceImp implements AsociationService {
@@ -92,6 +87,7 @@ public class AsociationServiceImp implements AsociationService {
                 .flatMap(m -> {
                     asociation.setMovements(new ArrayList<>());
                     asociation.setTransfers(new ArrayList<>());
+                    asociation.setMovementMobileWallets(new ArrayList<>());
                     return asociationRepository.insert(asociation);
                 });
     }
@@ -147,6 +143,28 @@ public class AsociationServiceImp implements AsociationService {
 
     }
 
+
+
+    @Override
+    public Mono<Asociation> createMovementMobileWallet(String cellNumber, MovementMobileWallet movementMobileWallet) {
+        return asociationRepository.findByCellNumberPhone(cellNumber)
+                .switchIfEmpty(Mono.error(new RuntimeException("Asociation with that cell number doesn´t exist")))
+                .flatMap(m -> {
+                    if (movementMobileWallet.getType().equalsIgnoreCase("R")) {
+                        m.getMovementMobileWallets().add(movementMobileWallet);
+                        m.setBalance(m.getBalance() + movementMobileWallet.getAmount());
+                    } else if (movementMobileWallet.getType().equalsIgnoreCase("E")) {
+                        m.getMovementMobileWallets().add(movementMobileWallet);
+                        m.setBalance(m.getBalance() - movementMobileWallet.getAmount());
+                        if (m.getBalance() < 0)
+                            return Mono.error(new RuntimeException("You don´t have enough money for the operation"));
+                    }
+                    return asociationRepository.save(m);
+                });
+
+    }
+
+
     @Override
     public Mono<Void> deleteAsociation(String id) {
         return asociationRepository.findById(id)
@@ -158,7 +176,7 @@ public class AsociationServiceImp implements AsociationService {
     public Mono<Asociation> updateAsociation(Asociation asociation) {
         return asociationRepository.findById(asociation.getId())
                 .switchIfEmpty(Mono.error(new RuntimeException("Asociation's ID does not exist")))
-                .flatMap(a->{
+                .flatMap(a -> {
                     a.setNumberProduct(asociation.getNumberProduct());
                     a.setBalance(asociation.getBalance());
                     return asociationRepository.save(a);
@@ -194,16 +212,16 @@ public class AsociationServiceImp implements AsociationService {
         });*/
 
         return asociationRepository.findByIdCustomer(idCustomer)
-                .flatMap(a->{
-                    System.out.println("id son:"+a.getId());
-                    Report1 report1=new Report1();
+                .flatMap(a -> {
+                    System.out.println("id son:" + a.getId());
+                    Report1 report1 = new Report1();
                     report1.setNameProduct(this.findProductById(a.getIdProduct()).map(Product::getName).block());
                     report1.setNumberAccount(a.getNumberProduct());
                     report1.setBalance(a.getBalance());
                     list.add(report1);
-                    System.out.println("idProducts son:"+a.getIdProduct());
-                    System.out.println("balance son:"+a.getBalance());
-                    System.out.println("lista: "+list);
+                    System.out.println("idProducts son:" + a.getIdProduct());
+                    System.out.println("balance son:" + a.getBalance());
+                    System.out.println("lista: " + list);
                     return Flux.just(list);
                 });
 
@@ -211,10 +229,10 @@ public class AsociationServiceImp implements AsociationService {
 
     @Override
     public Mono<Report2> movementsByProduct(String idCustomer, String idProduct) {
-        return asociationRepository.findByIdCustomer(idCustomer).filter(a->a.getIdProduct().equals(idProduct))
+        return asociationRepository.findByIdCustomer(idCustomer).filter(a -> a.getIdProduct().equals(idProduct))
                 .next()
-                .flatMap(a->{
-                    Report2 report2=new Report2();
+                .flatMap(a -> {
+                    Report2 report2 = new Report2();
                     report2.setNameProduct(this.findProductById(a.getIdProduct()).map(Product::getName).block());
                     report2.setNumberAccount(a.getNumberProduct());
                     report2.setBalance(a.getBalance());

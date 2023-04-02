@@ -5,9 +5,7 @@ import com.nttdata.movement.model.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 public interface AsociationService {
     Flux<Asociation> findAll();
@@ -17,6 +15,7 @@ public interface AsociationService {
     Mono<Asociation> createAsociation(Asociation asociation);
     Mono<Asociation> createMovement(String idAsociation, Movement movement);
     Mono<Asociation> createTransfer(Transfer transfer);
+    Mono<Asociation> createMovementMobileWallet(String cellNumber, MovementMobileWallet movementMobileWallet);
     Mono<Void> deleteAsociation(String id);
     Mono<Asociation> updateAsociation(Asociation asociation);
     Flux<List<Report1>> balanceProducts(String idCustomer);

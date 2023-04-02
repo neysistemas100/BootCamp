@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface CustomerRepository extends ReactiveMongoRepository<Customer,String > {
-
+    Mono<Customer> findByCellNumberPhone(String cellNumber);
 
 
 }

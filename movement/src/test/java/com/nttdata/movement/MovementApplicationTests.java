@@ -1,13 +1,17 @@
 package com.nttdata.movement;
 
 import com.nttdata.movement.entity.Asociation;
+import com.nttdata.movement.model.MovementMobileWallet;
 import com.nttdata.movement.repository.AsociationRepository;
 import com.nttdata.movement.service.AsociationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.util.BsonUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
 
 @SpringBootTest
 class MovementApplicationTests {
@@ -46,7 +50,19 @@ class MovementApplicationTests {
 
 	@Test
 	void p4(){
-		asociationService.movementsByProduct("1","2").subscribe(System.out::println);
+		asociationRepository.findAll()
+				.filter(a->a.getIdCustomer().equals("6"))
+				.filter(a->a.getIdProduct().equals("10"))
+				.next()
+				.subscribe(b-> System.out.println("MADRIDDDDDDDDD: "+b));
+	}
+
+	@Test
+	void p5(){
+		asociationService.createMovementMobileWallet("999999999",new MovementMobileWallet("R",10.0, LocalDateTime.now()))
+				.subscribe(b-> System.out.println("MADRIDDDDDDDDD: "+b));
+		//asociationRepository.findByCellNumberPhone("999999999")
+		//		.subscribe(a-> System.out.println("barza: "+a));
 	}
 
 

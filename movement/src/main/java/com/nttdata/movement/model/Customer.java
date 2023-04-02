@@ -19,5 +19,10 @@ public class Customer {
     //@NotEmpty(message = "ID can't be empty")
     private String id;
     private String type;
+    private String state;
     private String name;
+    private String number_document;
+
+    private String imei;
+    private String mail;
 }

@@ -45,4 +45,9 @@ public class CustomerController {
         return customerService.delete(id);
     }
 
+    @GetMapping("/seach/{cellNumber}")
+    public Mono<Customer> findByCellNumberPhone(@PathVariable("cellNumber") String cellNumber) {
+        return customerService.findByCellNumberPhone(cellNumber);
+    }
+
 }

@@ -66,4 +66,8 @@ public class CustomerServiceImp implements CustomerService {
 
 
     }
+
+    public Mono<Customer> findByCellNumberPhone(String cellNumber){
+        return customerRepository.findByCellNumberPhone(cellNumber);
+    }
 }

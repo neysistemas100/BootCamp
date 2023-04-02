@@ -11,4 +11,6 @@ public interface AsociationRepository extends ReactiveMongoRepository<Asociation
     Mono<Asociation> findByNumberProduct(String NumberProduct);
     Flux<Asociation> findByIdCustomer(String IdCustomer);
     Mono<Asociation> findByIdCustomerAndIdProduct(String IdCustomer, String IdProduct);
+    Mono<Asociation> findByCellNumberPhone(String CellNumberPhone);
+
 }

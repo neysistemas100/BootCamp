@@ -20,5 +20,9 @@ public class Customer {
     private String id;
     private String type;
     private String name;
-
+    private String number_document;
+    private String cellNumberPhone;
+    private String imei;
+    private String mail;
+    private String state;
 }
