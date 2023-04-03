@@ -65,6 +65,11 @@ class MovementApplicationTests {
 		//		.subscribe(a-> System.out.println("barza: "+a));
 	}
 
+	@Test
+	void p6(){
+		asociationService.updateAccountAsociated("6429aff5321884582abbeed3","123321")
+				.subscribe(l-> System.out.println("logrado "+l));
+	}
 
 
 }

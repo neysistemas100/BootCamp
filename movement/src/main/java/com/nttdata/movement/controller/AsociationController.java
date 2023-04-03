@@ -69,7 +69,11 @@ public class AsociationController {
         return asociationService.createMovementMobileWallet(cellNumber,movementMobileWallet);
     }
 
-
+    //update accountasociated to wallet money. idasociation: asociation of mobil wallet
+    @PutMapping("/{idAsociation}/{account}")
+    public Mono<Asociation> updateAccountAsociated(@PathVariable("idAsociation") String idAsociation,@PathVariable("account") String account){
+        return asociationService.updateAccountAsociated(idAsociation,account);
+    }
 
 
     //this endpoint gets report of all products(name, number, balance) by idcustomer
@@ -83,4 +87,6 @@ public class AsociationController {
     public Mono<Report2> movementsByProduct(@PathVariable("idCustomer") String idCustomer, @PathVariable("idProduct") String idProduct){
         return asociationService.movementsByProduct(idCustomer, idProduct);
     }
+
+
 }

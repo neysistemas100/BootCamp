@@ -28,7 +28,7 @@ public class Asociation {
     @NotEmpty(message = "Id Product can't be empty")
     private String idProduct;
     @NotNull
-    private String numberProduct;
+    private String numberAccount;
     private String cellNumberPhone;
     private String accountAsociated;
     @Min(value = 0, message = "this value can't be a negative value")

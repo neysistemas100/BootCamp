@@ -19,5 +19,5 @@ public class Product {
     private String id;
     private String type;
     private String name;
-    private String number_product;
+    private String numberAccount;
 }

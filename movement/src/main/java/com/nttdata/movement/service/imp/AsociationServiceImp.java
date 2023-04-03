@@ -1,5 +1,6 @@
 package com.nttdata.movement.service.imp;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.nttdata.movement.entity.Asociation;
 import com.nttdata.movement.feignclient.CustomerFeignClient;
 import com.nttdata.movement.model.*;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AsociationServiceImp implements AsociationService {
@@ -125,9 +127,9 @@ public class AsociationServiceImp implements AsociationService {
                 .then(asociationRepository.findByNumberProduct(transfer.getDestinationAccount()))
                 .switchIfEmpty(Mono.error(new RuntimeException("Destination account does not exist")))*/
 
-        Mono<Asociation> a1 = asociationRepository.findByNumberProduct(transfer.getSourceAccount())
+        Mono<Asociation> a1 = asociationRepository.findByNumberAccount(transfer.getSourceAccount())
                 .switchIfEmpty(Mono.error(new RuntimeException("Source account does not exist")));
-        Mono<Asociation> a2 = asociationRepository.findByNumberProduct(transfer.getDestinationAccount())
+        Mono<Asociation> a2 = asociationRepository.findByNumberAccount(transfer.getDestinationAccount())
                 .switchIfEmpty(Mono.error(new RuntimeException("Destination account does not exist")));
 
         return Mono.zip(a1, a2)
@@ -177,7 +179,7 @@ public class AsociationServiceImp implements AsociationService {
         return asociationRepository.findById(asociation.getId())
                 .switchIfEmpty(Mono.error(new RuntimeException("Asociation's ID does not exist")))
                 .flatMap(a -> {
-                    a.setNumberProduct(asociation.getNumberProduct());
+                    a.setNumberAccount(asociation.getNumberAccount());
                     a.setBalance(asociation.getBalance());
                     return asociationRepository.save(a);
                 });
@@ -216,7 +218,7 @@ public class AsociationServiceImp implements AsociationService {
                     System.out.println("id son:" + a.getId());
                     Report1 report1 = new Report1();
                     report1.setNameProduct(this.findProductById(a.getIdProduct()).map(Product::getName).block());
-                    report1.setNumberAccount(a.getNumberProduct());
+                    report1.setNumberAccount(a.getNumberAccount());
                     report1.setBalance(a.getBalance());
                     list.add(report1);
                     System.out.println("idProducts son:" + a.getIdProduct());
@@ -234,12 +236,39 @@ public class AsociationServiceImp implements AsociationService {
                 .flatMap(a -> {
                     Report2 report2 = new Report2();
                     report2.setNameProduct(this.findProductById(a.getIdProduct()).map(Product::getName).block());
-                    report2.setNumberAccount(a.getNumberProduct());
+                    report2.setNumberAccount(a.getNumberAccount());
                     report2.setBalance(a.getBalance());
                     report2.setMovements(a.getMovements());
                     report2.setTransfers(a.getTransfers());
                     return Mono.just(report2);
                 });
+    }
+
+    @Override
+    public Mono<Asociation> updateAccountAsociated(String idAsociation, String account) {
+        /*Mono<Asociation> a = asociationRepository.findAll()
+                .filter(b->b.getNumberProduct().equals(account))
+                .next();
+
+
+        return asociationRepository.findById(idAsociation)
+                .switchIfEmpty(Mono.error(new RuntimeException("Asociation's ID does not exist")))
+                .flatMap(a2 -> {
+                    System.out.println("llegue aca");
+                    //a2.setAccountAsociated(account);
+                    a2.setBalance(a2.getBalance()+ Objects.requireNonNull(a.block()).getBalance());
+                    return asociationRepository.save(a2);
+                });*/
+        return asociationRepository.findAll()
+                .filter(a1->a1.getNumberAccount().equals(account))
+                .next()
+                .flatMap(a2-> asociationRepository.findById(idAsociation)
+                        .flatMap(a3->{
+                            a3.setAccountAsociated(a2.getNumberAccount());
+                            a3.setBalance(a3.getBalance()+ a2.getBalance());
+
+                            return asociationRepository.save(a3);
+                        }));
     }
 
 
