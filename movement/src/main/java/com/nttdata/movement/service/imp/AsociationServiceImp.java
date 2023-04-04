@@ -8,6 +8,7 @@ import com.nttdata.movement.repository.AsociationRepository;
 import com.nttdata.movement.service.AsociationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+
 public class AsociationServiceImp implements AsociationService {
 
     CustomerFeignClient customerFeignClient;
@@ -38,8 +40,8 @@ public class AsociationServiceImp implements AsociationService {
 
     @Override
     public Mono<Asociation> findAsociation(String id) {
-        return asociationRepository.findById(id)
-                .switchIfEmpty(Mono.error(new RuntimeException("Asociation's ID does not exist")));
+        return asociationRepository.findById(id);
+                //.switchIfEmpty(Mono.error(new RuntimeException("Asociation's ID does not exist")));
     }
 
     @Override
@@ -269,6 +271,10 @@ public class AsociationServiceImp implements AsociationService {
 
                             return asociationRepository.save(a3);
                         }));
+    }
+
+    public int suma(int a, int b){
+        return a+b;
     }
 
 

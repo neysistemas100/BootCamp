@@ -13,6 +13,8 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 class MovementApplicationTests {
 
@@ -27,7 +29,7 @@ class MovementApplicationTests {
 
 	@Test
 	void p1(){
-		Mono<Asociation> aso=asociationRepository.findByNumberProduct("12345678");
+		Mono<Asociation> aso=asociationRepository.findByNumberAccount("12345678");
 		aso.subscribe(
 				value -> System.out.println("este valor: "+value.getId()),
 				error -> error.printStackTrace(),
@@ -69,6 +71,12 @@ class MovementApplicationTests {
 	void p6(){
 		asociationService.updateAccountAsociated("6429aff5321884582abbeed3","123321")
 				.subscribe(l-> System.out.println("logrado "+l));
+	}
+
+	@Test
+	void suma(){
+		int res = asociationService.suma(1,1);
+		assertThat(res).isEqualTo(2);
 	}
 
 

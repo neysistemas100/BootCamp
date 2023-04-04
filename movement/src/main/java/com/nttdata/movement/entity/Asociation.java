@@ -4,6 +4,7 @@ import com.nttdata.movement.model.Movement;
 import com.nttdata.movement.model.MovementMobileWallet;
 import com.nttdata.movement.model.Transfer;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -17,6 +18,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Document(collection="asociations")
 public class Asociation {
     @Id
