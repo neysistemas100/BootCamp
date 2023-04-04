@@ -5,15 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.redis.core.RedisHash;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection="customers")
-public class Customer {
+@RedisHash("customers")
+public class Customer implements Serializable {
     @Id
     @NotNull
     @NotEmpty(message = "ID can't be empty")
