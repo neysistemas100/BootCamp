@@ -23,6 +23,6 @@ public interface AsociationService {
     Flux<List<Report1>> balanceProducts(String idCustomer);
     Mono<Report2> movementsByProduct(String idCustomer, String idProduct);
     Mono<Asociation> updateAccountAsociated(String idAsociation, String account);
-    int suma(int a, int b);
+
 
 }

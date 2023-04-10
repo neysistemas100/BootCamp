@@ -67,6 +67,7 @@ public class AsociationServiceImp implements AsociationService {
 
     }
 
+
     @Override
     public Mono<Product> findProductById(String id) {
         return webClientBuilder.build()
@@ -273,9 +274,7 @@ public class AsociationServiceImp implements AsociationService {
                         }));
     }
 
-    public int suma(int a, int b){
-        return a+b;
-    }
+
 
 
 }

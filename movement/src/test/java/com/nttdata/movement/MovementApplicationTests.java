@@ -4,16 +4,17 @@ import com.nttdata.movement.entity.Asociation;
 import com.nttdata.movement.model.MovementMobileWallet;
 import com.nttdata.movement.repository.AsociationRepository;
 import com.nttdata.movement.service.AsociationService;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.util.BsonUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class MovementApplicationTests {
@@ -73,11 +74,7 @@ class MovementApplicationTests {
 				.subscribe(l-> System.out.println("logrado "+l));
 	}
 
-	@Test
-	void suma(){
-		int res = asociationService.suma(1,1);
-		assertThat(res).isEqualTo(2);
-	}
+
 
 
 }

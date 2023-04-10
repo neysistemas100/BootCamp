@@ -8,8 +8,7 @@ import com.nttdata.movement.model.Customer;
 import com.nttdata.movement.repository.AsociationRepository;
 import com.nttdata.movement.service.AsociationService;
 import lombok.Builder;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
+;
 import org.assertj.core.api.Assertions;
 import org.bouncycastle.jcajce.provider.symmetric.ChaCha;
 import org.junit.jupiter.api.AfterAll;
@@ -19,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockserver.client.MockServerClient;
+import org.mockserver.integration.ClientAndServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,6 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.testng.annotations.BeforeClass;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -33,45 +35,48 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockserver.integration.ClientAndServer.startClientAndServer;
+import static org.mockserver.model.Cookie.cookie;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
+import static org.mockserver.model.Parameter.param;
 import static reactor.core.publisher.Mono.when;
 
+
 @ExtendWith(MockitoExtension.class)
+
 @SpringBootTest
 class AsociationServiceImpTest {
 
     @InjectMocks
     private AsociationServiceImp asociationServiceImp;
-    @MockBean
-    private AsociationService asociationService;
     @Mock
     private AsociationRepository asociationRepository;
-    @Mock
-    private WebClient.Builder webClientBuilder;
-
     private Asociation asociation;
+    private static ClientAndServer mockServer;
     String asociationId = "123";
 
-    public static MockWebServer mockBackEnd;
+    //public static MockWebServer mockBackEnd;
 
-    @BeforeAll
+    /*@BeforeAll
     static void setUp() throws IOException {
         mockBackEnd = new MockWebServer();
         mockBackEnd.start();
     }
-
     @AfterAll
     static void tearDown() throws IOException {
         mockBackEnd.shutdown();
+    }*/
+
+    @BeforeAll
+    public static void startServer() {
+        mockServer = startClientAndServer(1081);
     }
 
-    @BeforeEach
-    void initialize() {
-        String baseUrl = String.format("http://localhost:%s",
-                mockBackEnd.getPort());
-
+    @AfterAll
+    public static void stopServer() {
+        mockServer.stop();
     }
-
-
 
     @Test
     void findAsociation() {
@@ -103,43 +108,37 @@ class AsociationServiceImpTest {
     }
 
     @Test
-    void findCustomerById() throws JsonProcessingException {
-        new MockServerClient("127.0.0.1", 1080)
+    void findCustomerById() {
+        Customer customer = new Customer();
+        customer.setId("1");
+        mockServer
                 .when(
                         request()
-                                .withMethod("get")
-                                .withPath("/customers")
-                                .withHeader("\"Content-type\", \"application/json\"")
-                                .withBody(exact("{id: '10'}")),
-                        exactly(1))
+                                .withMethod("GET")
+                                .withPath("/customer-service/customers/1")
+                )
                 .respond(
                         response()
-                                .withStatusCode(401)
-                                .withHeaders(
-                                        new Header("Content-Type", "application/json; charset=utf-8"),
-                                        new Header("Cache-Control", "public, max-age=86400"))
-                                .withBody("{ message: 'incorrect username and password combination' }")
-                                .withDelay(TimeUnit.SECONDS,1)
+                                .withStatusCode(200)
+                                .withBody("{'id': '1'}")
                 );
 
 
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        Customer mockCustomer = new Customer();
-        mockCustomer.setId("10");
-        mockBackEnd.enqueue(new MockResponse()
-                .setBody(objectMapper.writeValueAsString(mockCustomer))
-                .addHeader("Content-Type", "application/json"));
-
-        Mono<Customer> customerMono = asociationServiceImp.findCustomerById("10");
-
-        StepVerifier.create(customerMono)
+        StepVerifier
+                .create(asociationServiceImp.findCustomerById("1"))
                 .assertNext(c->{
-                    assertEquals(c.getId(), "10");
+                    assertEquals(c.getId(), "1");
 
                 })
+                //.consumeNextWith(a->{
+                //  assertThat(a.getId().equals("123"));
+
+                // })
                 .verifyComplete();
+
     }
+
+
 
     @Test
     void findProductById() {
